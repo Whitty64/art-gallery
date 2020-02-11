@@ -1,17 +1,37 @@
 <template>
   <div id="app">
-    <HelloWorld />
+    <Nav/>
+    <main class="min-h-screen m-auto">
+      <Gallery/>
+      <Home />
+    </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Nav from './components/Nav.vue'
+import Home from './components/Home.vue'
+import Gallery from './components/Gallery.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
-  }
+    Nav,
+    Home,
+    Gallery,
+  },
+    data() {
+    return {
+      currentPage:"home",
+    }
+  },
+  methods: {
+    random : function() {
+      this.l = this.art[Math.floor(Math.random() * this.art.length)];
+      this.r = this.art[Math.floor(Math.random() * this.art.length)];
+    },
+
+  },
 }
 </script>
 
