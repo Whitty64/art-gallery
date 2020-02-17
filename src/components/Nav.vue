@@ -30,7 +30,9 @@ export default {
     }
   },
   mounted: function() {
-
+    // document.getElementById("home-page").style.display = "block"
+    document.getElementById("work-page").style.display = "none"
+    document.getElementById("about-page").style.display = "none"
   },
   methods: {
     page : function() {

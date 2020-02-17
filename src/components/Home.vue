@@ -1,68 +1,72 @@
 <template>
-  <section id="home-page" class="max-w-5xl h-full w-full mx-auto">
+  <section id="home-page" :class="{block: isActive}" class="max-w-5xl h-full w-full mx-auto">
+    <!-- <h1 v-for="item in mapper" v-bind:key="item.id">{{item}}</h1> -->
     <div class="flex items-center justify-center my-8 md:my-16">
-      <!-- <transition-group name="fade" tag="div"> -->
-        <div v-for="i in [art]" :key="i.index" class="shadow-md m-1 bg-cover" v-bind:style="{ backgroundImage: 'url(' + leftImg + ')' }" style="width: 500px; height:500px;"></div>
-      <!-- </transition-group> -->
-      <!-- <transition-group name="fade" tag="div"> -->
-        <div v-for="i in [art]" :key="i.index" class="shadow-md m-1 bg-cover" v-bind:style="{ backgroundImage: 'url(' + rightImg + ')' }" style="width: 500px; height:500px;"></div>
-      <!-- </transition-group> -->
+        <div class="shadow-md m-1 bg-cover" v-bind:style="{ backgroundImage: 'url(' + this.leftImg + ')' }" style="width: 500px; height:500px;"></div>
+        <div class="shadow-md m-1 bg-cover" v-bind:style="{ backgroundImage: 'url(' + this.rightImg + ')' }" style="width: 500px; height:500px;"></div>
     </div>
     <div class="flex justify-between">
-      <div v-for="i in art" :key="i" @click="next()" class="slider-btn-container shadow-md w-full mx-2">
+      <div v-for="img in response" :key="img.id" @click="next()" class="slider-btn-container shadow-md w-full mx-2">
         <li class="slider-btn shadow" ></li>
       </div>
     </div>
+    <!-- <div v-for="art in response" :key="art">
+      <img :src="art.link" alt="">
+      <h1>IMGUR Title</h1>
+    </div> -->
   </section>
 </template>
 
 <script>
+import {shuffle} from "lodash-es";
+
 export default {
   name: "Home",
+  //  props: {
+  //   method: { type: Function },
+  //   response: Array,
+  // },
+  props: [
+    "response",
+    "isLoading",
+  ],
   data() {
     return {
-      art: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-      ],
       timer: null,
       currentIndex: 0,
       leftImg:"",
       rightImg:"",
-      l:null,
-      r:null,
+      // value:"i am a value",
     }
   },
-  mounted: function() {
-    this.leftImg = ("images/art/" + 1 + ".jpg");
-    this.rightImg = ("images/art/" + 2 + ".jpg");
+
+  mounted() {
+    // this.leftImg = this.response.link;
+    // this.rightImg = this.response.link;
+    // console.log("home res",this.response)
+    // this.$emit("map-response",this.value)
+    this.next();
+  },
+  watch: {
+    // isLoading() {
+    //   console.log("isloading changed")
+    //   this.mapResponse();
+    // }
+  },
+    computed: {
+    random() {
+      return shuffle(this.response.map(img => img.link));
+    },
   },
   methods: {
-    random : function() {
-      this.l = this.art[Math.floor(Math.random() * this.art.length)];
-      this.r = this.art[Math.floor(Math.random() * this.art.length)];
-    },
-    next: function() {
-      this.random();
-      // Does not check if current left image is equal to the new left image
-      while (this.l === this.r) {
-        this.random();
-        console.log("equal")
+    next() {
+      this.currentIndex+= 2;
+      if (this.currentIndex >= this.random.length) {
+        this.currentIndex = 0;
       }
-      this.leftImg = ("images/art/" + this.l + ".jpg");
-      this.rightImg = ("images/art/" + this.r + ".jpg");
-
+      this.leftImg = this.random[this.currentIndex];
+      this.rightImg = this.random[this.currentIndex + 1];
     },
-  },
-  computed: {
 
   },
 };
