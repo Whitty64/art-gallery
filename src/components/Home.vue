@@ -1,7 +1,7 @@
 <template>
-  <section id="home-page" :class="{block: isActive}" class="max-w-5xl h-full w-full mx-auto">
+  <section v-if="response" id="home-page" class="max-w-5xl h-full w-full mx-auto">
     <!-- <h1 v-for="item in mapper" v-bind:key="item.id">{{item}}</h1> -->
-    <div class="flex items-center justify-center my-8 md:my-16">
+    <div class="flex flex-col sm:flex-row items-center justify-center my-8 md:my-16">
         <div class="shadow-md m-1 bg-cover" v-bind:style="{ backgroundImage: 'url(' + this.leftImg + ')' }" style="width: 500px; height:500px;"></div>
         <div class="shadow-md m-1 bg-cover" v-bind:style="{ backgroundImage: 'url(' + this.rightImg + ')' }" style="width: 500px; height:500px;"></div>
     </div>
@@ -18,62 +18,80 @@
 </template>
 
 <script>
-import {shuffle} from "lodash-es";
+// import axios from 'axios';
+
+// import {shuffle} from "lodash-es";
 
 export default {
   name: "Home",
-  //  props: {
-  //   method: { type: Function },
-  //   response: Array,
-  // },
-  props: [
-    "response",
-    "isLoading",
-  ],
+  props: {
+    response: Array,
+    isLoading: Boolean,
+  },
   data() {
     return {
       timer: null,
       currentIndex: 0,
       leftImg:"",
       rightImg:"",
-      // value:"i am a value",
+      // response: null,
+
     }
   },
 
   mounted() {
-    // this.leftImg = this.response.link;
-    // this.rightImg = this.response.link;
-    // console.log("home res",this.response)
-    // this.$emit("map-response",this.value)
-    this.next();
+
   },
+
   watch: {
-    // isLoading() {
-    //   console.log("isloading changed")
-    //   this.mapResponse();
-    // }
+    response: function() {
+      this.next();
+      console.log("watcher",this.response)
+    }
   },
-    computed: {
-    random() {
-      return shuffle(this.response.map(img => img.link));
-    },
+
+  computed: {
   },
+
   methods: {
+    // random() {
+    //   return shuffle(this.response.map(img => img.link));
+    // },
+
     next() {
+      console.log("next res",this.response)
       this.currentIndex+= 2;
-      if (this.currentIndex >= this.random.length) {
+      if (this.currentIndex >= this.response.length) {
         this.currentIndex = 0;
       }
-      this.leftImg = this.random[this.currentIndex];
-      this.rightImg = this.random[this.currentIndex + 1];
+      this.leftImg = this.response[this.currentIndex].link;
+      this.rightImg = this.response[this.currentIndex + 1].link;
     },
+    // imgur() {
+    //   // const ACCESS_TOKEN=`7212c5e90cfd58bb57682ebc54f1bb683a25ceff`
+    //   // const REFRESH_TOKEN=`2fea5ac4978b48c4e91c543f8f9c45359b7013c4`
+    //   // const CLIENT_SECRET=`9657c0de1ad6037a4b6f209b5660236c98210395`
+    //   const CLIENT_ID=`6e79d957303ffff`
+    //   let that = this
+
+    //   return axios.get("https://api.imgur.com/3/album/MsAJctm/images", {headers: {"Authorization" : "Client-ID "+ CLIENT_ID}})
+    //     .then(function (result) {
+    //         that.response = result.data.data;
+    //         that.isLoading = false;
+    //         console.log("vue data response", that.response);
+    //         shuffle();
+    //         that.next();
+    //       })
+    //     .catch(function (error) {
+    //       console.log('error',error);
+    //     })
+    // },
 
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 * {
   box-sizing: border-box;
 }

@@ -1,65 +1,76 @@
 <template>
   <div id="app">
-    <Nav/>
     <main class="min-h-screen m-auto">
-      <!-- <Gallery/> -->
-      <Gallery
+      <Nav :response="response" />
+      <router-view :response="response"></router-view>
+      <!-- <Gallery
         v-for="art in response"
         v-bind:key="art.id"
         v-bind:title="art.link"
       />
-      <!-- <Home :response="response" @map-response="mapResponse" /> -->
-      <Home v-if="response" :response="response" :isLoading="isLoading" />
+      <Home v-if="response" :response="response" :isLoading="isLoading" /> -->
     </main>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-
-import Nav from './components/Nav.vue'
-import Home from './components/Home.vue'
-import Gallery from './components/Gallery.vue'
-// import imgur from './api/imgur.js'
-
-
+import {shuffle} from "lodash-es";import Nav from './components/Nav.vue'
 export default {
   name: 'app',
   components: {
     Nav,
-    Home,
-    Gallery,
   },
-    data() {
+  props: [
+    // "response",
+  ],
+  data() {
     return {
       currentPage: "home",
-      response: null,
       isLoading: true,
-      // message: `Hello ${imgur.ACCESS_TOKEN}`,
-
+      error: null,
+      // currentIndex: 0,
+      // leftImg:"",
+      // rightImg:"",
+      response: null,
     }
   },
   mounted() {
+    console.log("app", this.response);
     this.imgur();
+
   },
+
   methods: {
-    imgur: function() {
+    random() {
+      return shuffle(this.response.map(img => img.link));
+    },
+
+    next() {
+      console.log("res",this.response)
+      this.currentIndex+= 2;
+      if (this.currentIndex >= this.response.length) {
+        this.currentIndex = 0;
+      }
+      this.leftImg = this.response[this.currentIndex].link;
+      this.rightImg = this.response[this.currentIndex + 1].link;
+    },
+    imgur() {
       // const ACCESS_TOKEN=`7212c5e90cfd58bb57682ebc54f1bb683a25ceff`
       // const REFRESH_TOKEN=`2fea5ac4978b48c4e91c543f8f9c45359b7013c4`
       // const CLIENT_SECRET=`9657c0de1ad6037a4b6f209b5660236c98210395`
       const CLIENT_ID=`6e79d957303ffff`
-      // console.log("out", this.response)
       let that = this
 
       return axios.get("https://api.imgur.com/3/album/MsAJctm/images", {headers: {"Authorization" : "Client-ID "+ CLIENT_ID}})
         .then(function (result) {
             that.response = result.data.data;
-            // console.log(result);
             that.isLoading = false;
             console.log("vue data response", that.response);
+            shuffle();
+            // that.next();
           })
         .catch(function (error) {
-          // handle error
           console.log('error',error);
         })
     },

@@ -1,6 +1,7 @@
 <template>
-    <section id="about" class="hidden">
-        About
+    <section id="about">
+      <h1>About Me</h1>
+      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui quam eligendi, tempore repudiandae aliquam debitis obcaecati deserunt cum in esse adipisci itaque beatae accusamus sunt optio ullam quae est aliquid?</p>
     </section>
 </template>
 
@@ -18,21 +19,21 @@ export default {
   methods: {
     page : function() {
         // let home = document.getElementB
-        if(event.target.id == "home"){
-            console.log("home")
-            this.currentPage = "home"
-            document.getElementById("home-page")
-        }
-        else if (event.target.id == "work") {
-            console.log("work")
-            this.currentPage = "work"
-            document.getElementById("work-page")
-        }
-        else if (event.target.id == "about") {
-            console.log("about")
-            this.currentPage = "about"
-            document.getElementById("about-page")
-        }
+        // if(event.target.id == "home"){
+        //     console.log("home")
+        //     this.currentPage = "home"
+        //     document.getElementById("home-page")
+        // }
+        // else if (event.target.id == "work") {
+        //     console.log("work")
+        //     this.currentPage = "work"
+        //     document.getElementById("work-page")
+        // }
+        // else if (event.target.id == "about") {
+        //     console.log("about")
+        //     this.currentPage = "about"
+        //     document.getElementById("about-page")
+        // }
     },
   },
   computed: {
